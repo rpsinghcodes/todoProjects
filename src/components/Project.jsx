@@ -4,10 +4,9 @@ export default function Project({
   dueDate,
   description,
   todos,
-  handleDelete,
   id,
-  handleTodos,
-  handleDeleteTodo,
+  projectDispatch,
+  projectState,
 }) {
   const todoItem = useRef();
   const currentId = id;
@@ -19,7 +18,13 @@ export default function Project({
         <h1 className="text-4xl  capitalize ">{title}</h1>
         <button
           className="bg-slate-300 px-4 py-2 rounded "
-          onClick={() => handleDelete(id)}
+          // onClick={() => handleDelete(id)}
+          onClick={() =>
+            projectDispatch({
+              type: "DELETE_PROJECT",
+              payload: { id: projectState.selectedProjectId },
+            })
+          }
         >
           Delete
         </button>
@@ -34,14 +39,20 @@ export default function Project({
           type="text"
           className=" w-60 h-10 outline-slate-400 rounded mr-8 bg-slate-300 px-1 "
         />
-        <button onClick={() => { 
-          if(todoItem.current.value.trim().length === 0) {
-            alert('Please Enter a valid Input')
-          } else {
-            handleTodos(todoItem.current.value, currentId);
-            todoItem.current.value = '';
-          }
-           }}>
+        <button
+          onClick={() => {
+            if (todoItem.current.value.trim().length === 0) {
+              alert("Please Enter a valid Input");
+            } else {
+              projectDispatch({
+                type: "ADD_TODO",
+                payload: { newTodo: todoItem.current.value, id: id },
+              });
+              // handleTodos(todoItem.current.value, currentId);
+              todoItem.current.value = "";
+            }
+          }}
+        >
           Add Task
         </button>
       </p>
@@ -49,7 +60,14 @@ export default function Project({
         {todos.map((todo) => (
           <div key={todo.id} className="flex justify-between py-4">
             <p>{todo.content}</p>
-            <button onClick={() =>handleDeleteTodo(id, todo.id)} >Clear</button>
+            <button
+              onClick={() =>
+                // handleDeleteTodo(projectState.selectedProjectId, todo.id)
+                projectDispatch({type:'DELETE_TODO', payload: {id, todoId:todo.id}})
+              }
+            >
+              Clear
+            </button>
           </div>
         ))}
       </div>

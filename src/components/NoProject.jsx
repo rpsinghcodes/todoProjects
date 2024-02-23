@@ -1,6 +1,6 @@
 import NoProjectImg from "../assets/no-projects.png";
 
-export default function NoProject({ setData }) {
+export default function NoProject({ projectDispatch }) {
   return (
     <div className=" my-20 flex  items-center flex-col">
       <img
@@ -16,10 +16,9 @@ export default function NoProject({ setData }) {
       </p>
       <button
         className="rounded px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white"
-        onClick={() => setData(prevData => ({
-          ...prevData,
-          selectedProjectId: null
-        }))}
+        onClick={() =>
+          projectDispatch({ type: "CHANGE_SCREEN", payload: null })
+        }
       >
         Create new project
       </button>
